@@ -7,7 +7,6 @@
 /home/ezequiel/NetBeansProjects/RLDEVS4j-Base/src/main/java/rldevs4j/experiment/ExperimentResult.java
 /home/ezequiel/NetBeansProjects/RLDEVS4j-Base/src/main/java/rldevs4j/base/agent/preproc/DeltaTimeStackPreprocessing.java
 /home/ezequiel/NetBeansProjects/RLDEVS4j-Base/src/main/java/rldevs4j/base/agent/preproc/NoPreprocessing.java
-/home/ezequiel/NetBeansProjects/RLDEVS4j-Base/src/main/java/rldevs4j/base/env/msg/MultiParamEvent.java
 /home/ezequiel/NetBeansProjects/RLDEVS4j-Base/src/main/java/rldevs4j/utils/FastByteArrayOutputStream.java
 /home/ezequiel/NetBeansProjects/RLDEVS4j-Base/src/main/java/rldevs4j/base/env/StateSpaceInfo.java
 /home/ezequiel/NetBeansProjects/RLDEVS4j-Base/src/main/java/rldevs4j/utils/FastByteArrayInputStream.java
@@ -27,9 +26,12 @@
 /home/ezequiel/NetBeansProjects/RLDEVS4j-Base/src/main/java/rldevs4j/base/agent/preproc/StackPreprocessing.java
 /home/ezequiel/NetBeansProjects/RLDEVS4j-Base/src/main/java/rldevs4j/base/env/msg/Step.java
 /home/ezequiel/NetBeansProjects/RLDEVS4j-Base/src/main/java/rldevs4j/base/agent/preproc/Preprocessing.java
+/home/ezequiel/NetBeansProjects/RLDEVS4j-Base/src/main/java/rldevs4j/base/env/msg/MultCategorical.java
 /home/ezequiel/NetBeansProjects/RLDEVS4j-Base/src/main/java/rldevs4j/base/agent/Agent.java
 /home/ezequiel/NetBeansProjects/RLDEVS4j-Base/src/main/java/rldevs4j/utils/Nd4jUtils.java
+/home/ezequiel/NetBeansProjects/RLDEVS4j-Base/src/main/java/rldevs4j/base/env/msg/GaussianContinuous.java
 /home/ezequiel/NetBeansProjects/RLDEVS4j-Base/src/main/java/rldevs4j/base/env/gsmdp/evgen/ExponetialExogenousEventGenerator.java
 /home/ezequiel/NetBeansProjects/RLDEVS4j-Base/src/main/java/rldevs4j/utils/DateUtils.java
 /home/ezequiel/NetBeansProjects/RLDEVS4j-Base/src/main/java/rldevs4j/base/agent/preproc/DeltaTimeFilterPreprocessing.java
+/home/ezequiel/NetBeansProjects/RLDEVS4j-Base/src/main/java/rldevs4j/base/env/msg/Categorical.java
 /home/ezequiel/NetBeansProjects/RLDEVS4j-Base/src/main/java/rldevs4j/base/env/gsmdp/DateStateObserver.java

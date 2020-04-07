@@ -18,25 +18,22 @@ import rldevs4j.base.env.msg.Step;
  * @author Ezequiel Beccaría 
  */
 public class StateObserver extends atomic implements Cloneable{
-
     protected INDArray state;
-    protected INDArray prevState;
-    protected float reward;
+    protected double reward;
     protected Behavior behavior;
     protected boolean debug;
     protected NDArrayStrings toString;
-    protected List<Event> lastTransEvents;
+    protected List<Step> trace;
 
     public StateObserver(
             Behavior behavior,
             boolean debug) {
         super("State Observer");
-        this.reward = 0;
         this.behavior = behavior;
         this.debug = debug;
-        this.prevState = null;
-        this.lastTransEvents = new ArrayList<>();
+        this.trace = new ArrayList<>();
         this.state = behavior.observation();
+        this.reward = 0D;
 
         addInport("event");
         addOutport("event_genearator");
@@ -44,15 +41,13 @@ public class StateObserver extends atomic implements Cloneable{
     }
 
     @Override
-    public void initialize() {   
-        prevState = null;
+    public void initialize() {  
+        trace.clear();
         passivate();
     }
 
     @Override
     public void deltint() {
-        prevState = null;
-        lastTransEvents.clear();
         setSigma(INFINITY);
     }
 
@@ -60,24 +55,21 @@ public class StateObserver extends atomic implements Cloneable{
     public void deltext(double e, message x) {
         //set state time
         updateStateDate(state, e);
-        //copy of previus state
-        prevState = state.detach();
+        reward = 0D;
         //Iterate over messages and update state
         for (int i = 0; i < x.getLength(); i++) {
             if (messageOnPort(x, "event", i)) {
-                Event event = (Event) x.getValOnPort("event", i);
-                lastTransEvents.add(event);
-                behavior.trasition(state.detach(), event);
-                state = behavior.observation();
-                reward = behavior.reward();                
-                setSigma(0);
+                Event event = (Event) x.getValOnPort("event", i);                
+                behavior.trasition(state.detach(), event);      
+                reward += behavior.reward(); // reward acumulation for multiple events
             }
-        }                    
+        }            
+        state = behavior.observation();           
+        setSigma(0);
     }
 
     @Override
     public message out() {
-        boolean done = behavior.done();
         message m = new message();
         if(this.sigma != INFINITY){
             //activate/deactiva exogenous events
@@ -85,15 +77,10 @@ public class StateObserver extends atomic implements Cloneable{
                     "event_genearator",
                     behavior.activeEvents());
             m.add(con_event_gen);
-
+            Step step = new Step(state, reward, behavior.done(), behavior.enabledActions());
+            trace.add(step);
             //sent new state, actios and reward to agent
-            content con_agent = makeContent(
-                "step",
-                new Step(
-                    state.dup(), 
-                    reward, 
-                    done, 
-                    behavior.enabledActions()));
+            content con_agent = makeContent("step", step);
             m.add(con_agent);
         }
         return m;
@@ -105,7 +92,6 @@ public class StateObserver extends atomic implements Cloneable{
 
     public void setState(INDArray state) {
         this.state = state;
-        this.prevState = null;
     }
     
     protected void updateStateDate(INDArray state, Double e){
@@ -115,5 +101,9 @@ public class StateObserver extends atomic implements Cloneable{
     @Override
     public StateObserver clone(){
         return new StateObserver(behavior, debug);
+    }
+
+    public List<Step> getTrace() {
+        return trace;
     }
 }    

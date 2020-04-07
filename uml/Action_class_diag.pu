@@ -1,0 +1,47 @@
+@startuml
+set namespaceSeparator .
+skinparam class {
+ArrowColor Black
+BorderColor Black
+BackgroundColor White
+}
+skinparam note {
+  BorderColor Black
+  BackgroundColor White
+}
+
+class GenCol.entity{
+  -String name
+}
+
+class rldevs4j.base.env.msg.Event{
+  -int id
+  +int getId()
+}
+rldevs4j.base.env.msg.Event -|> GenCol.entity
+rldevs4j.base.env.msg.Event -> "1" rldevs4j.base.env.msg.EventType : type
+enum rldevs4j.base.env.msg.EventType{
+  EXOGENOUS
+  ACTION
+}
+
+class rldevs4j.base.env.msg.Categorical<T> {
+  -T value
+  +T getValue()
+}
+rldevs4j.base.env.msg.Categorical -|> rldevs4j.base.env.msg.Event
+
+class rldevs4j.base.env.msg.MultiCategorical<T> {
+  -T[] value
+  +T[] getValue()
+}
+rldevs4j.base.env.msg.MultiCategorical -|> rldevs4j.base.env.msg.Event
+
+class rldevs4j.base.env.msg.GaussianContinuous {
+  -double[] mean
+  -double[] std
+  +double[] getMean()
+  +double[] getStd()
+}
+rldevs4j.base.env.msg.GaussianContinuous -|> rldevs4j.base.env.msg.Event
+@enduml

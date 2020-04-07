@@ -1,12 +1,13 @@
+rldevs4j/base/env/msg/Categorical.class
 rldevs4j/base/agent/preproc/Preprocessing.class
 rldevs4j/base/agent/preproc/DeltaTimeFilterPreprocessing.class
 rldevs4j/base/env/gsmdp/evgen/ExogenousEventActivation.class
 rldevs4j/base/agent/preproc/NoPreprocessing.class
 rldevs4j/utils/Point2D.class
 rldevs4j/utils/CollectionsUtils.class
-rldevs4j/base/env/msg/MultiParamEvent.class
 rldevs4j/base/env/gsmdp/DateStateObserver.class
 rldevs4j/base/agent/preproc/StackPreprocessing.class
+rldevs4j/base/env/msg/GaussianContinuous.class
 rldevs4j/base/env/gsmdp/evgen/GaussianDecayEventGenerator.class
 rldevs4j/utils/ArrayMath.class
 rldevs4j/utils/Nd4jUtils.class
@@ -35,3 +36,4 @@ rldevs4j/utils/CSVUtils.class
 rldevs4j/utils/CircularArrayList.class
 rldevs4j/base/agent/Agent.class
 rldevs4j/base/env/gsmdp/StateObserver.class
+rldevs4j/base/env/msg/MultCategorical.class
