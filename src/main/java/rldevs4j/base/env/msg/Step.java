@@ -49,4 +49,11 @@ public class Step extends entity {
     public void setObservation(INDArray observation) {
         this.observation = observation;
     }
+
+    @Override
+    public String toString() {
+        return "Step{" + "observation=" + observation + ", reward=" + reward + ", done=" + done + '}';
+    }
+    
+    
 }

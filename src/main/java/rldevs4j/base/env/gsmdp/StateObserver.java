@@ -78,6 +78,8 @@ public class StateObserver extends atomic implements Cloneable{
                     behavior.activeEvents());
             m.add(con_event_gen);
             Step step = new Step(state, reward, behavior.done(), behavior.enabledActions());
+            if(debug)
+                System.out.println(step);
             trace.add(step);
             //sent new state, actios and reward to agent
             content con_agent = makeContent("step", step);
