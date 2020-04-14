@@ -9,11 +9,11 @@ import rldevs4j.base.agent.Agent;
  * agent/worker.
  * @author Ezequiel Beccaría
  */
-public class Container extends digraph {
+public class RLEnvironment extends digraph {
     private Agent agent;
     private Environment env;
         
-    public Container(Agent agent, Environment environment) {
+    public RLEnvironment(Agent agent, Environment environment) {
         super("Global Container");             
         
         this.agent = agent;

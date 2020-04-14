@@ -55,5 +55,17 @@ public class Step extends entity {
         return "Step{" + "observation=" + observation + ", reward=" + reward + ", done=" + done + '}';
     }
     
-    
+    /**
+     * Returns the observation feature in idx position.
+     * If idx is negative, return the feature in inverse order.
+     * @param idx
+     * @return 
+     */
+    public double getFeature(int idx){
+        assert Math.abs(idx) < observation.length();
+        if(idx>0)
+            return observation.getDouble(idx);
+        else
+            return observation.getDouble(observation.length()+idx);
+    }
 }

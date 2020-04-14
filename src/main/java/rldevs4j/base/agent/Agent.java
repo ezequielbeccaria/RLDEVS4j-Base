@@ -18,13 +18,11 @@ import rldevs4j.base.env.msg.Step;
  * @date 22/10/2018
  */
 public abstract class Agent extends atomic {
-    private int doNothingActionId;
     private Event nextAction;
     private Preprocessing preprocessing;
     
-    public Agent(String name, int doNothingActionId, Preprocessing preprocessing) {
+    public Agent(String name, Preprocessing preprocessing) {
         super(name);        
-        this.doNothingActionId = doNothingActionId;
         this.preprocessing = preprocessing;
 
         addInport("step");
@@ -45,21 +43,15 @@ public abstract class Agent extends atomic {
 
     @Override
     public void deltext(double e, message x) {   
-        boolean passivate = true;
         for (int i = 0; i < x.getLength(); i++) {
             if (messageOnPort(x, "step", i)) {
                 Step step = ((Step) x.getValOnPort("step", i));    
                 if(preprocessing.input(step)){
                     nextAction = observation(preprocessing.getState());
-                    if(nextAction.getId()!=doNothingActionId){
-                        setSigma(0.001); // activate output function and internal transition function       
-                        passivate = false;
-                    }
+                    setSigma(0.001); // activate output function and internal transition function           
                 }                
             }
         }
-        if(passivate)
-            passivate();
     }
 
     @Override
@@ -91,5 +83,5 @@ public abstract class Agent extends atomic {
     }   
     
     public abstract void setDebugMode(boolean value);
-    public abstract void clearMemory();
+    public abstract void clear();
 }

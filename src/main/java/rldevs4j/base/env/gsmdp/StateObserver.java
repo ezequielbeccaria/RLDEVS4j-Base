@@ -9,6 +9,7 @@ import model.modeling.message;
 import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.string.NDArrayStrings;
 import rldevs4j.base.env.msg.Event;
+import rldevs4j.base.env.msg.EventType;
 import rldevs4j.base.env.msg.Step;
 
 /*     
@@ -24,6 +25,7 @@ public class StateObserver extends atomic implements Cloneable{
     protected boolean debug;
     protected NDArrayStrings toString;
     protected List<Step> trace;
+    protected boolean prevAction;
 
     public StateObserver(
             Behavior behavior,
@@ -59,7 +61,8 @@ public class StateObserver extends atomic implements Cloneable{
         //Iterate over messages and update state
         for (int i = 0; i < x.getLength(); i++) {
             if (messageOnPort(x, "event", i)) {
-                Event event = (Event) x.getValOnPort("event", i);                
+                Event event = (Event) x.getValOnPort("event", i);     
+                prevAction = event.getType().equals(EventType.action);
                 behavior.trasition(state.detach(), event);      
                 reward += behavior.reward(); // reward acumulation for multiple events
             }
@@ -82,8 +85,10 @@ public class StateObserver extends atomic implements Cloneable{
                 System.out.println(step);
             trace.add(step);
             //sent new state, actios and reward to agent
-            content con_agent = makeContent("step", step);
-            m.add(con_agent);
+            if(!prevAction){
+                content con_agent = makeContent("step", step);
+                m.add(con_agent);
+            }
         }
         return m;
     }
