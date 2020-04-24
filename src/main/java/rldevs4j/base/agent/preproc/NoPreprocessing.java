@@ -1,6 +1,5 @@
 package rldevs4j.base.agent.preproc;
 
-import org.nd4j.linalg.api.ndarray.INDArray;
 import rldevs4j.base.env.msg.Step;
 
 /**
@@ -29,11 +28,5 @@ public class NoPreprocessing implements Preprocessing{
     @Override
     public Preprocessing clone() {
         return new NoPreprocessing();
-    }
-
-    @Override
-    public void preprocess(INDArray state) {
-        
-    }
-    
+    }    
 }

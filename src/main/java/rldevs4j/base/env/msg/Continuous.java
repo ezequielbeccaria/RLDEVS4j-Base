@@ -21,4 +21,9 @@ public class Continuous extends Event {
     public double[] getValue() {
         return value;
     }
+    
+    @Override
+    public Continuous copy() {
+        return new Continuous(this.getId(), this.name, this.getType(), this.value);
+    }
 }

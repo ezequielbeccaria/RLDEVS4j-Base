@@ -63,9 +63,21 @@ public class Step extends entity {
      */
     public double getFeature(int idx){
         assert Math.abs(idx) < observation.length();
-        if(idx>0)
+        if(idx>=0)
             return observation.getDouble(idx);
         else
             return observation.getDouble(observation.length()+idx);
+    }
+    
+    public void setFeature(int idx, double value){
+        assert Math.abs(idx) < observation.length();
+        if(idx>=0)
+            observation.putScalar(new long[]{idx}, value);
+        else
+            observation.putScalar(new long[]{observation.length()+idx}, value);
+    }
+    
+    public int observationSize(){
+        return observation.columns();
     }
 }

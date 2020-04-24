@@ -80,8 +80,7 @@ public abstract class Agent extends atomic {
      */
     public void episodeFinished(){
         preprocessing.reset();
+        this.clear();
     }   
-    
-    public abstract void setDebugMode(boolean value);
     public abstract void clear();
 }

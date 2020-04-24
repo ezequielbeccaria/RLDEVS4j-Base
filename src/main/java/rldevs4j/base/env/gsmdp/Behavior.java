@@ -10,6 +10,7 @@ import rldevs4j.base.env.msg.Event;
  * @author Ezequiel Beccaria
  */
 public interface Behavior {
+    public void initialize();
     public void trasition(INDArray state, Event e);
     public INDArray observation();
     public float reward();

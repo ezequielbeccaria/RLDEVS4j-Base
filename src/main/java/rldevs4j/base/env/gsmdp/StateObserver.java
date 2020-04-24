@@ -6,6 +6,8 @@ import java.util.Locale;
 import model.modeling.atomic;
 import model.modeling.content;
 import model.modeling.message;
+import model.simulation.CoordinatorInterface;
+import model.simulation.CoupledCoordinatorInterface;
 import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.string.NDArrayStrings;
 import rldevs4j.base.env.msg.Event;
@@ -34,7 +36,6 @@ public class StateObserver extends atomic implements Cloneable{
         this.behavior = behavior;
         this.debug = debug;
         this.trace = new ArrayList<>();
-        this.state = behavior.observation();
         this.reward = 0D;
 
         addInport("event");
@@ -45,6 +46,8 @@ public class StateObserver extends atomic implements Cloneable{
     @Override
     public void initialize() {  
         trace.clear();
+        behavior.initialize();
+        state = behavior.observation();
         passivate();
     }
 
@@ -80,7 +83,7 @@ public class StateObserver extends atomic implements Cloneable{
                     "event_genearator",
                     behavior.activeEvents());
             m.add(con_event_gen);
-            Step step = new Step(state, reward, behavior.done(), behavior.enabledActions());
+            Step step = new Step(state.dup(), reward, behavior.done(), behavior.enabledActions());
             if(debug)
                 System.out.println(step);
             trace.add(step);

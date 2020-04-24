@@ -1,6 +1,5 @@
 package rldevs4j.base.agent.preproc;
 
-import org.nd4j.linalg.api.ndarray.INDArray;
 import rldevs4j.base.env.msg.Step;
 
 /**
@@ -14,5 +13,4 @@ public interface Preprocessing {
     public Step getState();
     public void reset();
     public Preprocessing clone();
-    public void preprocess(INDArray state);
 }
