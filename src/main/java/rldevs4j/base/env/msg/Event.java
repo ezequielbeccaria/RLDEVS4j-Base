@@ -41,4 +41,11 @@ public class Event extends entity {
     public EventType getType() {
         return type;
     }    
+
+    @Override
+    public String toString() {
+        return "Event{" + "type=" + type + ", id=" + id + '}';
+    }
+    
+    
 }

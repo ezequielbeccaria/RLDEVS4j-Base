@@ -19,11 +19,13 @@ import rldevs4j.base.env.msg.Step;
  */
 public abstract class Agent extends atomic {
     private Event nextAction;
-    private Preprocessing preprocessing;
+    private final Preprocessing preprocessing;
+    private final double actionDelay; 
     
-    public Agent(String name, Preprocessing preprocessing) {
+    public Agent(String name, Preprocessing preprocessing, double actionDelay) {
         super(name);        
         this.preprocessing = preprocessing;
+        this.actionDelay = actionDelay;
 
         addInport("step");
         addOutport("action");
@@ -48,7 +50,7 @@ public abstract class Agent extends atomic {
                 Step step = ((Step) x.getValOnPort("step", i));    
                 if(preprocessing.input(step)){
                     nextAction = observation(preprocessing.getState());
-                    setSigma(0.001); // activate output function and internal transition function           
+                    setSigma(actionDelay); // activate output function and internal transition function           
                 }                
             }
         }
@@ -79,6 +81,7 @@ public abstract class Agent extends atomic {
      * Method used to inform to the agent the end of the current episode.
      */
     public void episodeFinished(){
+        nextAction = null;
         preprocessing.reset();
         this.clear();
     }   

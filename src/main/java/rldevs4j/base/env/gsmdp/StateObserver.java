@@ -70,7 +70,7 @@ public class StateObserver extends atomic implements Cloneable{
                 reward += behavior.reward(); // reward acumulation for multiple events
             }
         }            
-        state = behavior.observation();           
+        state = behavior.observation();     
         setSigma(0);
     }
 
@@ -89,7 +89,7 @@ public class StateObserver extends atomic implements Cloneable{
             trace.add(step);
             //sent new state, actios and reward to agent
             if(!prevAction){
-                content con_agent = makeContent("step", step);
+                content con_agent = makeContent("step", step.clone());
                 m.add(con_agent);
             }
         }

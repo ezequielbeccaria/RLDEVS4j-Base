@@ -13,11 +13,11 @@ import org.nd4j.linalg.api.ndarray.INDArray;
  * being "true" indicates the episode has terminated. * 
  * @author Ezequiel Beccaría 
  */
-public class Step extends entity {
+public class Step extends entity {    
     private INDArray observation;
     private double reward;
-    private boolean done;
-    private List<Event> activeActions;
+    private final boolean done;
+    private final List<Event> activeActions;
 
     public Step(INDArray observation, double reward, boolean done, List<Event> activeActions) {
         this.observation = observation;
@@ -79,5 +79,9 @@ public class Step extends entity {
     
     public int observationSize(){
         return observation.columns();
+    }
+    
+    public Step clone() {
+        return new Step(observation.dup(), reward, done, activeActions);
     }
 }
