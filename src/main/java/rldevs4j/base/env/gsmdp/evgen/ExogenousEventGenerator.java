@@ -36,16 +36,13 @@ public abstract class ExogenousEventGenerator extends atomic implements Cloneabl
     }
 
     @Override
-    public void initialize() {
-        if(initSigma != null)
-            holdIn(this.initPhase, initSigma);                                      
-        else
-            holdIn(this.initPhase, nextSigma()); 
+    public void initialize() {        
+        holdIn(this.initPhase, initSigma);                                              
     }
 
     @Override
     public void deltint() {
-        setSigma(nextSigma());
+        holdIn("waiting", nextSigma()); 
     }
 
     @Override
@@ -68,8 +65,10 @@ public abstract class ExogenousEventGenerator extends atomic implements Cloneabl
     @Override
     public message out() {
         message m = new message();
-        content con = makeContent("out", e);
-        m.add(con);
+        if(!phaseIs("passive")){
+            content con = makeContent("out", e);
+            m.add(con);
+        }
         return m;
     }
 

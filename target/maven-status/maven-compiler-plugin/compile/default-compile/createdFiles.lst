@@ -5,6 +5,7 @@ rldevs4j/base/agent/preproc/NoPreprocessing.class
 rldevs4j/utils/Point2D.class
 rldevs4j/utils/CollectionsUtils.class
 rldevs4j/base/env/gsmdp/DateStateObserver.class
+rldevs4j/base/env/gsmdp/evgen/FixedTimeExogenousEventGen.class
 rldevs4j/base/env/gsmdp/evgen/GaussianDecayEventGenerator.class
 rldevs4j/utils/ArrayMath.class
 rldevs4j/utils/Nd4jUtils.class

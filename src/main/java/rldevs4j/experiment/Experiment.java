@@ -28,15 +28,15 @@ import rldevs4j.utils.CollectionsUtils;
 public abstract class Experiment {
     protected NumberFormat formatter = new DecimalFormat("#0.00");         
     private double TO_SECONDS = 1000;
-    private int id;
-    private String name;
+    protected int id;
+    protected String name;
     private long expTotalRunningTime;
     private INDArray expRunningTime;
     protected final int repetitions;
-    private boolean logging;
+    protected boolean logging;
     protected final Logger logger;
-    private boolean plot;
-    private String resultsFilePath;
+    protected boolean plot;
+    protected String resultsFilePath;
     protected Random rnd = Nd4j.getRandom();
     
 

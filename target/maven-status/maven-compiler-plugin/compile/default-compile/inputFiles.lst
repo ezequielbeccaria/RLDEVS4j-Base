@@ -23,6 +23,7 @@
 /home/ezequiel/NetBeansProjects/RLDEVS4j-Base/src/main/java/rldevs4j/base/env/gsmdp/Behavior.java
 /home/ezequiel/NetBeansProjects/RLDEVS4j-Base/src/main/java/rldevs4j/base/env/gsmdp/evgen/ExogenousEventActivation.java
 /home/ezequiel/NetBeansProjects/RLDEVS4j-Base/src/main/java/rldevs4j/base/env/msg/Step.java
+/home/ezequiel/NetBeansProjects/RLDEVS4j-Base/src/main/java/rldevs4j/base/env/gsmdp/evgen/FixedTimeExogenousEventGen.java
 /home/ezequiel/NetBeansProjects/RLDEVS4j-Base/src/main/java/rldevs4j/base/agent/preproc/Preprocessing.java
 /home/ezequiel/NetBeansProjects/RLDEVS4j-Base/src/main/java/rldevs4j/base/agent/preproc/MinMaxScaler.java
 /home/ezequiel/NetBeansProjects/RLDEVS4j-Base/src/main/java/rldevs4j/base/env/msg/MultCategorical.java

@@ -11,11 +11,12 @@ import rldevs4j.base.env.msg.Event;
  */
 public interface Behavior {
     public void initialize();
-    public void trasition(INDArray state, Event e);
+    public void trasition(Event e, double time);
     public INDArray observation();
     public float reward();
     public boolean done();
     public List<Event> enabledActions();
     public ExogenousEventActivation activeEvents();
     public List<Event> getAllActios();
+    public boolean notifyAgent();
 }

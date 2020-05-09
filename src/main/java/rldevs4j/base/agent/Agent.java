@@ -86,4 +86,5 @@ public abstract class Agent extends atomic {
         this.clear();
     }   
     public abstract void clear();
+    public abstract void saveModel(String path);
 }

@@ -2,14 +2,13 @@ package rldevs4j.base.env.gsmdp;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 import model.modeling.atomic;
 import model.modeling.content;
 import model.modeling.message;
 import model.simulation.CoordinatorInterface;
 import model.simulation.CoupledCoordinatorInterface;
 import org.nd4j.linalg.api.ndarray.INDArray;
-import org.nd4j.linalg.string.NDArrayStrings;
+import rldevs4j.base.env.gsmdp.evgen.ExogenousEventActivation;
 import rldevs4j.base.env.msg.Event;
 import rldevs4j.base.env.msg.EventType;
 import rldevs4j.base.env.msg.Step;
@@ -21,11 +20,9 @@ import rldevs4j.base.env.msg.Step;
  * @author Ezequiel Beccaría 
  */
 public class StateObserver extends atomic implements Cloneable{
-    protected INDArray state;
     protected double reward;
     protected Behavior behavior;
     protected boolean debug;
-    protected NDArrayStrings toString;
     protected List<Step> trace;
     protected boolean prevAction;
 
@@ -47,7 +44,6 @@ public class StateObserver extends atomic implements Cloneable{
     public void initialize() {  
         trace.clear();
         behavior.initialize();
-        state = behavior.observation();
         passivate();
     }
 
@@ -58,19 +54,17 @@ public class StateObserver extends atomic implements Cloneable{
 
     @Override
     public void deltext(double e, message x) {
-        //set state time
-        updateStateDate(state, e);
         reward = 0D;
         //Iterate over messages and update state
         for (int i = 0; i < x.getLength(); i++) {
             if (messageOnPort(x, "event", i)) {
                 Event event = (Event) x.getValOnPort("event", i);     
                 prevAction = event.getType().equals(EventType.action);
-                behavior.trasition(state.detach(), event);      
-                reward += behavior.reward(); // reward acumulation for multiple events
+                behavior.trasition(event, currentGlobalTime());                      
             }
         }            
-        state = behavior.observation();     
+        reward += behavior.reward(); // reward acumulation for multiple events
+
         setSigma(0);
     }
 
@@ -79,16 +73,19 @@ public class StateObserver extends atomic implements Cloneable{
         message m = new message();
         if(this.sigma != INFINITY){
             //activate/deactiva exogenous events
-            content con_event_gen = makeContent(
-                    "event_genearator",
-                    behavior.activeEvents());
-            m.add(con_event_gen);
-            Step step = new Step(state.dup(), reward, behavior.done(), behavior.enabledActions());
+            ExogenousEventActivation eea = behavior.activeEvents();
+            if(eea != null){
+                content con_event_gen = makeContent(
+                        "event_genearator",
+                        behavior.activeEvents());
+                m.add(con_event_gen);
+            }
+            Step step = new Step(behavior.observation().dup(), reward, behavior.done(), behavior.enabledActions());
             if(debug)
                 System.out.println(step);
             trace.add(step);
             //sent new state, actios and reward to agent
-            if(!prevAction){
+            if(behavior.notifyAgent()){
                 content con_agent = makeContent("step", step.clone());
                 m.add(con_agent);
             }
@@ -96,14 +93,10 @@ public class StateObserver extends atomic implements Cloneable{
         return m;
     }
 
-    protected String debugTransition(INDArray prevState, Event event, INDArray state, double reward) {
-        return "prevState=" + toString.format(prevState) + ", event=" + event.toString() + ", reward=" + String.format(Locale.US, "%07.2f", reward) + "}\n";
-    }
+//    protected String debugTransition(INDArray prevState, Event event, INDArray state, double reward) {
+//        return "prevState=" + toString.format(prevState) + ", event=" + event.toString() + ", reward=" + String.format(Locale.US, "%07.2f", reward) + "}\n";
+//    }
 
-    public void setState(INDArray state) {
-        this.state = state;
-    }
-    
     protected void updateStateDate(INDArray state, Double e){
         state.putScalar(state.columns()-1, state.getDouble(state.columns()-1)+e);
     }
@@ -116,4 +109,14 @@ public class StateObserver extends atomic implements Cloneable{
     public List<Step> getTrace() {
         return trace;
     }
+    
+    private Double currentGlobalTime(){
+        CoordinatorInterface globalCoordnator = this.getSim().getRootParent();
+        CoupledCoordinatorInterface parent = this.getSim().getParent();
+        while(globalCoordnator==null){
+            globalCoordnator = parent.getRootParent();
+            parent = parent.getParent();
+        }        
+        return globalCoordnator.getTL();
+    }  
 }    
