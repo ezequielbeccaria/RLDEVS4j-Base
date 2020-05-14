@@ -13,7 +13,7 @@ import rldevs4j.base.env.msg.Event;
 public abstract class ExogenousEventGenerator extends atomic implements Cloneable{
     // Default value used when next random sigma drops below 0.
     protected final double NEGATIVE_SIGMA_CORRECTOR = 0.001; 
-    private final Event e; //Generated Event
+    private Event e; //Generated Event
     private final String initPhase;
     private final Double initSigma;
 
@@ -74,6 +74,9 @@ public abstract class ExogenousEventGenerator extends atomic implements Cloneabl
 
     public Event getE() {
         return e;
+    }
+    public void setE(Event e){
+        this.e = e;
     }
 
     public String getInitPhase() {
