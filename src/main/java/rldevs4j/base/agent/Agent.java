@@ -20,7 +20,7 @@ import rldevs4j.base.env.msg.Step;
 public abstract class Agent extends atomic {
     private Event nextAction;
     private final Preprocessing preprocessing;
-    private final double actionDelay; 
+    private final double actionDelay;     
     
     public Agent(String name, Preprocessing preprocessing, double actionDelay) {
         super(name);        

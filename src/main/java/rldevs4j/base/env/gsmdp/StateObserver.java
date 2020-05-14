@@ -1,7 +1,10 @@
 package rldevs4j.base.env.gsmdp;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
 import model.modeling.atomic;
 import model.modeling.content;
 import model.modeling.message;
@@ -24,7 +27,6 @@ public class StateObserver extends atomic implements Cloneable{
     protected Behavior behavior;
     protected boolean debug;
     protected List<Step> trace;
-    protected boolean prevAction;
 
     public StateObserver(
             Behavior behavior,
@@ -58,9 +60,12 @@ public class StateObserver extends atomic implements Cloneable{
         //Iterate over messages and update state
         for (int i = 0; i < x.getLength(); i++) {
             if (messageOnPort(x, "event", i)) {
-                Event event = (Event) x.getValOnPort("event", i);     
-                prevAction = event.getType().equals(EventType.action);
-                behavior.trasition(event, currentGlobalTime());                      
+                double currentTime = currentGlobalTime();
+                Event event = (Event) x.getValOnPort("event", i);
+                if(EventType.action.equals(event.getType())){
+
+                }
+                behavior.trasition(event, currentTime);
             }
         }            
         reward += behavior.reward(); // reward acumulation for multiple events
@@ -93,14 +98,6 @@ public class StateObserver extends atomic implements Cloneable{
         return m;
     }
 
-//    protected String debugTransition(INDArray prevState, Event event, INDArray state, double reward) {
-//        return "prevState=" + toString.format(prevState) + ", event=" + event.toString() + ", reward=" + String.format(Locale.US, "%07.2f", reward) + "}\n";
-//    }
-
-    protected void updateStateDate(INDArray state, Double e){
-        state.putScalar(state.columns()-1, state.getDouble(state.columns()-1)+e);
-    }
-    
     @Override
     public StateObserver clone(){
         return new StateObserver(behavior, debug);
@@ -109,7 +106,7 @@ public class StateObserver extends atomic implements Cloneable{
     public List<Step> getTrace() {
         return trace;
     }
-    
+
     private Double currentGlobalTime(){
         CoordinatorInterface globalCoordnator = this.getSim().getRootParent();
         CoupledCoordinatorInterface parent = this.getSim().getParent();
