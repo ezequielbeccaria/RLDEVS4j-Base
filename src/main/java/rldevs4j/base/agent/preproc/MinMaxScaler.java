@@ -21,7 +21,6 @@ public class MinMaxScaler implements Preprocessing{
 
     @Override
     public boolean input(Step step) {
-        //TODO Normalize step
         for(int i=0;i<step.observationSize();i++){
             step.setFeature(i, normalize(i, step.getFeature(i)));
         }
