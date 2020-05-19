@@ -84,7 +84,9 @@ public abstract class Agent extends atomic {
         nextAction = null;
         preprocessing.reset();
         this.clear();
-    }   
+    }
+    public abstract void trainingFinished();
     public abstract void clear();
     public abstract void saveModel(String path);
+    public abstract void loadModel(String path);
 }
