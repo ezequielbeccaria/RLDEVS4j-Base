@@ -6,9 +6,9 @@ package rldevs4j.base.env.msg;
  * @author Ezequiel Beccaría
  */
 public class Continuous extends Event { 
-    private final double[] value;    
+    private final float[] value;
     
-    public Continuous(int id, String name, EventType type, double[] value) {
+    public Continuous(int id, String name, EventType type, float[] value) {
         super(id, name, type);
         this.value = value;
         
@@ -18,7 +18,7 @@ public class Continuous extends Event {
         return value.length;
     }
 
-    public double[] getValue() {
+    public float[] getValue() {
         return value;
     }
     

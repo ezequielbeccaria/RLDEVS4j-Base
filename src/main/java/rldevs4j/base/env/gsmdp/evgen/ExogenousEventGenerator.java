@@ -49,7 +49,7 @@ public abstract class ExogenousEventGenerator extends atomic implements Cloneabl
     public void deltext(double e, message x) {
         for (int i = 0; i < x.getLength(); i++) {
             if (messageOnPort(x, "in", i)) {       
-                Map<String, Double> content = ((ExogenousEventActivation)x.getValOnPort("in", i)).getIndividualContent(name);
+                Map<String, Float> content = ((ExogenousEventActivation)x.getValOnPort("in", i)).getIndividualContent(name);
                 if(content.get("active").equals(1D)){                    
                     if(phaseIs("passive")){       
                         holdIn("active", nextSigma());

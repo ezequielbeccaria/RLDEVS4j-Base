@@ -15,11 +15,11 @@ import org.nd4j.linalg.api.ndarray.INDArray;
  */
 public class Step extends entity {    
     private INDArray observation;
-    private double reward;
+    private float reward;
     private final boolean done;
     private final List<Event> activeActions;
 
-    public Step(INDArray observation, double reward, boolean done, List<Event> activeActions) {
+    public Step(INDArray observation, float reward, boolean done, List<Event> activeActions) {
         this.observation = observation;
         this.reward = reward;
         this.done = done;

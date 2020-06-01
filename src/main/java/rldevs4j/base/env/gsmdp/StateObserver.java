@@ -23,7 +23,7 @@ import rldevs4j.base.env.msg.Step;
  * @author Ezequiel Beccaría 
  */
 public class StateObserver extends atomic implements Cloneable{
-    protected double reward;
+    protected float reward;
     protected Behavior behavior;
     protected boolean debug;
     protected List<Step> trace;
@@ -35,7 +35,7 @@ public class StateObserver extends atomic implements Cloneable{
         this.behavior = behavior;
         this.debug = debug;
         this.trace = new ArrayList<>();
-        this.reward = 0D;
+        this.reward = 0F;
 
         addInport("event");
         addOutport("event_genearator");
@@ -56,7 +56,7 @@ public class StateObserver extends atomic implements Cloneable{
 
     @Override
     public void deltext(double e, message x) {
-        reward = 0D;
+        reward = 0F;
         //Iterate over messages and update state
         for (int i = 0; i < x.getLength(); i++) {
             if (messageOnPort(x, "event", i)) {
