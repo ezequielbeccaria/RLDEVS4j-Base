@@ -166,6 +166,7 @@ public abstract class Experiment {
         for(int i=0;i<results.size();i++){
             // add a line plot to the PlotPanel                
             plot.addLinePlot("Avg. Reward",  CollectionsUtils.DoubleToArray(results.get(i).getAverageReward()));            
+            plot.addLinePlot("Avg. 100 Reward",  CollectionsUtils.DoubleToArray(results.get(i).getAverage100Reward()));
         }
         // put the PlotPanel in a JFrame, as a JPanel
         JFrame frame = new JFrame("Results");

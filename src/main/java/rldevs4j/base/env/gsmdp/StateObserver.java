@@ -62,9 +62,6 @@ public class StateObserver extends atomic implements Cloneable{
             if (messageOnPort(x, "event", i)) {
                 double currentTime = currentGlobalTime();
                 Event event = (Event) x.getValOnPort("event", i);
-                if(EventType.action.equals(event.getType())){
-
-                }
                 behavior.trasition(event, currentTime);
             }
         }            
