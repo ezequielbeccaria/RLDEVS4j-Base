@@ -50,11 +50,11 @@ public abstract class ExogenousEventGenerator extends atomic implements Cloneabl
         for (int i = 0; i < x.getLength(); i++) {
             if (messageOnPort(x, "in", i)) {       
                 Map<String, Float> content = ((ExogenousEventActivation)x.getValOnPort("in", i)).getIndividualContent(name);
-                if(content.get("active").equals(1D)){                    
+                if(content.get("active").equals(1F)){
                     if(phaseIs("passive")){       
                         holdIn("active", nextSigma());
                     }
-                } else if(content.get("active").equals(0D)){
+                } else if(content.get("active").equals(0F)){
                     passivate();                 
                 }    
             }     

@@ -11,6 +11,7 @@ public class Categorical<T> extends Event{
     
     public Categorical(int id, String name, EventType type, T value) {
         super(id, name, type);
+        this.value = value;
     }
 
     public T getValue() {

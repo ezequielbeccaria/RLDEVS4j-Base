@@ -19,10 +19,8 @@ public abstract class Environment extends digraph implements Cloneable{
         addOutport("step");
     }
     
-    public abstract INDArray getInitialState();
     @Override
     public abstract Environment clone();
     public abstract List<Event> getActionSpace();
-    public abstract StateSpaceInfo getStateSpaceInfo();    
     public abstract List<Step> getTrace();
 }

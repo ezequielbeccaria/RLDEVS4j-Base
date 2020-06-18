@@ -133,6 +133,7 @@ public abstract class Experiment {
             headers.add("episode");
             headers.add("reward");
             headers.add("avg_reward");
+            headers.add("avg_100_reward");
             headers.add("time");
             headers.add("avg_time");
             CSVUtils.writeLine(writer, headers, '|');
@@ -146,6 +147,7 @@ public abstract class Experiment {
                     line.add(String.valueOf(i+1)); // episode number
                     line.add(formatter.format(result.getEpisodeReward().get(i))); // episode reward
                     line.add(formatter.format(result.getAverageReward().get(i))); // episode average reward
+                    line.add(formatter.format(result.getAverage100Reward().get(i))); // episode average reward
                     line.add(formatter.format(result.getEpisodeTime().get(i)/TO_SECONDS)); // episode running time in seconds
                     line.add(formatter.format(result.getAverageTime().get(i)/TO_SECONDS)); // repetition running time in seconds                    
                     
