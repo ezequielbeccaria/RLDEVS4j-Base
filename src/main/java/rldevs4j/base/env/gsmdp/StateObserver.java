@@ -56,7 +56,6 @@ public class StateObserver extends atomic implements Cloneable{
 
     @Override
     public void deltext(double e, message x) {
-        reward = 0F;
         //Iterate over messages and update state
         for (int i = 0; i < x.getLength(); i++) {
             if (messageOnPort(x, "event", i)) {
@@ -90,6 +89,7 @@ public class StateObserver extends atomic implements Cloneable{
             if(behavior.notifyAgent()){
                 content con_agent = makeContent("step", step.clone());
                 m.add(con_agent);
+                reward = 0F;
             }
         }
         return m;
