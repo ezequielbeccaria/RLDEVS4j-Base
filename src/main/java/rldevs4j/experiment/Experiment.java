@@ -28,7 +28,6 @@ import rldevs4j.utils.CollectionsUtils;
 public abstract class Experiment {
     protected NumberFormat formatter = new DecimalFormat("#0.00");         
     private double TO_SECONDS = 1000;
-    protected int id;
     protected String name;
     private long expTotalRunningTime;
     private INDArray expRunningTime;
@@ -40,8 +39,7 @@ public abstract class Experiment {
     protected Random rnd = Nd4j.getRandom();
     
 
-    public Experiment(int expId, String expName, int repetitions, boolean logging, boolean plot, String resultsFilePath, Integer seed) {
-        this.id = expId;
+    public Experiment(String expName, int repetitions, boolean logging, boolean plot, String resultsFilePath, Integer seed) {
         this.name = expName;
         this.repetitions = repetitions;
         this.expRunningTime = Nd4j.zeros(repetitions);
@@ -53,12 +51,12 @@ public abstract class Experiment {
             rnd.setSeed(seed);
         
         
-        logger = Logger.getLogger(String.valueOf(id)+"-"+name);          
+        logger = Logger.getLogger(name);
         //Setup Text File logging        
         try {
             SimpleDateFormat sdf = new SimpleDateFormat("MM-dd_HHmm");
             FileHandler fh = null;
-            fh = new FileHandler(String.valueOf(id)+"-"+name+"_"+sdf.format(Calendar.getInstance().getTime()) + ".log", 0, 1);
+            fh = new FileHandler(name+"_"+sdf.format(Calendar.getInstance().getTime()) + ".log", 0, 1);
             fh.setFormatter(new SimpleFormatter());
             logger.addHandler(fh);
             logger.addHandler(new ConsoleHandler());
@@ -79,14 +77,14 @@ public abstract class Experiment {
             if(logging)
                 logger.log(Level.INFO, "Experiment {0} Terminated. Elapsed time: {1} sec.", new Object[]{i, formatter.format(expRunningTime.div(TO_SECONDS).getDouble(0))});
             if(resultsFilePath != null)
-                writeResults(experimentsResults, true);
+                writeResults(experimentsResults, i, true);
         }        
         long endTotalTime = System.currentTimeMillis();
         expTotalRunningTime = (endTotalTime - startTotalTime);  //divide by 1000000 to get milliseconds.
         if(logging)
             finalLog();
         if(resultsFilePath != null)
-            writeResults(experimentsResults, false);
+            writeResults(experimentsResults, -1,false);
         if(plot)
             plotResults(experimentsResults);
     }
@@ -119,12 +117,12 @@ public abstract class Experiment {
         return expRunningTime.div(TO_SECONDS);
     }
     
-    private void writeResults(List<ExperimentResult> results, boolean backup){
+    private void writeResults(List<ExperimentResult> results, int repetition, boolean backup){
         FileWriter writer;        
         try {
-            String filename = resultsFilePath+String.valueOf(id)+"-"+name;
+            String filename = resultsFilePath+name+"_"+(repetition==-1?"all.csv":(repetition+1)+".csv");
             if(backup)
-                filename = filename.concat(".bkp"+results.size());
+                filename = filename.concat(".bkp");
             writer = new FileWriter(filename);
             //write headers 
             List<String> headers = new ArrayList<>();
