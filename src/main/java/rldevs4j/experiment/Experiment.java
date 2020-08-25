@@ -1,11 +1,13 @@
 package rldevs4j.experiment;
 
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 import java.util.logging.ConsoleHandler;
@@ -70,6 +72,9 @@ public abstract class Experiment {
         List<ExperimentResult> experimentsResults = new ArrayList<>();
         long startTotalTime = System.currentTimeMillis();
         for(int i=0;i<repetitions;i++){
+            if(existsResults(i))
+                continue;
+            logger.log(Level.INFO, "Experiment {0} Started.", new Object[]{i});
             long startTime = System.currentTimeMillis();
             experimentsResults.add(experiment(this.rnd, i+1));
             long endTime = System.currentTimeMillis();            
@@ -77,14 +82,14 @@ public abstract class Experiment {
             if(logging)
                 logger.log(Level.INFO, "Experiment {0} Terminated. Elapsed time: {1} sec.", new Object[]{i, formatter.format(expRunningTime.div(TO_SECONDS).getDouble(0))});
             if(resultsFilePath != null)
-                writeResults(experimentsResults, i, true);
+                writeResults(experimentsResults, i);
         }        
         long endTotalTime = System.currentTimeMillis();
         expTotalRunningTime = (endTotalTime - startTotalTime);  //divide by 1000000 to get milliseconds.
         if(logging)
             finalLog();
         if(resultsFilePath != null)
-            writeResults(experimentsResults, -1,false);
+            mergeAllResults();
         if(plot)
             plotResults(experimentsResults);
     }
@@ -116,13 +121,17 @@ public abstract class Experiment {
     public INDArray getExpRunningTimeSeconds() {
         return expRunningTime.div(TO_SECONDS);
     }
+
+    private boolean existsResults(int repetition){
+        String filename = resultsFilePath+name+"_"+(repetition+1)+".csv";
+        File f = new File(filename);
+        return f.exists() && !f.isDirectory();
+    }
     
-    private void writeResults(List<ExperimentResult> results, int repetition, boolean backup){
+    private void writeResults(List<ExperimentResult> results, int repetition){
         FileWriter writer;        
         try {
-            String filename = resultsFilePath+name+"_"+(repetition==-1?"all.csv":(repetition+1)+".csv");
-            if(backup)
-                filename = filename.concat(".bkp");
+            String filename = resultsFilePath+name+"_"+(repetition+1)+".csv";
             writer = new FileWriter(filename);
             //write headers 
             List<String> headers = new ArrayList<>();
@@ -154,6 +163,37 @@ public abstract class Experiment {
             }
             writer.flush();
             writer.close();                
+        } catch (IOException ex) {
+            logger.log(Level.SEVERE, null, ex);
+        }
+    }
+
+    private void mergeAllResults(){
+        FileWriter writer;
+        try {
+            String filename = resultsFilePath+name+"_all.csv";
+            writer = new FileWriter(filename);
+            //write headers
+            List<String> headers = new ArrayList<>();
+            headers.add("agent");
+            headers.add("experiment");
+            headers.add("episode");
+            headers.add("reward");
+            headers.add("avg_reward");
+            headers.add("avg_100_reward");
+            headers.add("time");
+            headers.add("avg_time");
+            CSVUtils.writeLine(writer, headers, '|');
+
+            for(int i=1;i<=repetitions;i++){
+                String f = resultsFilePath+name+"_"+i+".csv";
+                List<String[]> lines = CSVUtils.readLines(f, '|');
+                for(int j=1;j<lines.size();j++){
+                    CSVUtils.writeLine(writer, Arrays.asList(lines.get(i)), '|');
+                }
+            }
+            writer.flush();
+            writer.close();
         } catch (IOException ex) {
             logger.log(Level.SEVERE, null, ex);
         }
