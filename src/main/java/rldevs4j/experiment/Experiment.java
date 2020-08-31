@@ -82,7 +82,7 @@ public abstract class Experiment {
             if(logging)
                 logger.log(Level.INFO, "Experiment {0} Terminated. Elapsed time: {1} sec.", new Object[]{i, formatter.format(expRunningTime.div(TO_SECONDS).getDouble(0))});
             if(resultsFilePath != null)
-                writeResults(experimentsResults, i);
+                writeResults(experimentsResults.get(i), i);
         }        
         long endTotalTime = System.currentTimeMillis();
         expTotalRunningTime = (endTotalTime - startTotalTime);  //divide by 1000000 to get milliseconds.
@@ -128,7 +128,7 @@ public abstract class Experiment {
         return f.exists() && !f.isDirectory();
     }
     
-    private void writeResults(List<ExperimentResult> results, int repetition){
+    private void writeResults(ExperimentResult result, int repetition){
         FileWriter writer;        
         try {
             String filename = resultsFilePath+name+"_"+(repetition+1)+".csv";
@@ -145,21 +145,18 @@ public abstract class Experiment {
             headers.add("avg_time");
             CSVUtils.writeLine(writer, headers, '|');
             //write data
-            for(int j=0;j<results.size();j++){
-                ExperimentResult result = results.get(j);
-                for(int i=0;i<result.size();i++){
-                    List<String> line = new ArrayList<>();
-                    line.add(name); // experimet name
-                    line.add(String.valueOf(j+1)); // repetition number
-                    line.add(String.valueOf(i+1)); // episode number
-                    line.add(formatter.format(result.getEpisodeReward().get(i))); // episode reward
-                    line.add(formatter.format(result.getAverageReward().get(i))); // episode average reward
-                    line.add(formatter.format(result.getAverage100Reward().get(i))); // episode average reward
-                    line.add(formatter.format(result.getEpisodeTime().get(i)/TO_SECONDS)); // episode running time in seconds
-                    line.add(formatter.format(result.getAverageTime().get(i)/TO_SECONDS)); // repetition running time in seconds                    
-                    
-                    CSVUtils.writeLine(writer, line, '|');
-                }                
+            for(int i=0;i<result.size();i++){
+                List<String> line = new ArrayList<>();
+                line.add(name); // experimet name
+                line.add(String.valueOf(repetition+1)); // repetition number
+                line.add(String.valueOf(i+1)); // episode number
+                line.add(formatter.format(result.getEpisodeReward().get(i))); // episode reward
+                line.add(formatter.format(result.getAverageReward().get(i))); // episode average reward
+                line.add(formatter.format(result.getAverage100Reward().get(i))); // episode average reward
+                line.add(formatter.format(result.getEpisodeTime().get(i)/TO_SECONDS)); // episode running time in seconds
+                line.add(formatter.format(result.getAverageTime().get(i)/TO_SECONDS)); // repetition running time in seconds
+
+                CSVUtils.writeLine(writer, line, '|');
             }
             writer.flush();
             writer.close();                
@@ -205,7 +202,7 @@ public abstract class Experiment {
 
         for(int i=0;i<results.size();i++){
             // add a line plot to the PlotPanel                
-            plot.addLinePlot("Avg. Reward",  CollectionsUtils.DoubleToArray(results.get(i).getAverageReward()));            
+//            plot.addLinePlot("Avg. Reward",  CollectionsUtils.DoubleToArray(results.get(i).getAverageReward()));
             plot.addLinePlot("Avg. 100 Reward",  CollectionsUtils.DoubleToArray(results.get(i).getAverage100Reward()));
         }
         // put the PlotPanel in a JFrame, as a JPanel
