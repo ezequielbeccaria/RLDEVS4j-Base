@@ -82,7 +82,7 @@ public abstract class Experiment {
             if(logging)
                 logger.log(Level.INFO, "Experiment {0} Terminated. Elapsed time: {1} sec.", new Object[]{i, formatter.format(expRunningTime.div(TO_SECONDS).getDouble(0))});
             if(resultsFilePath != null)
-                writeResults(experimentsResults.get(i), i);
+                writeResults(experimentsResults.get(experimentsResults.size()-1), i);
         }        
         long endTotalTime = System.currentTimeMillis();
         expTotalRunningTime = (endTotalTime - startTotalTime);  //divide by 1000000 to get milliseconds.
