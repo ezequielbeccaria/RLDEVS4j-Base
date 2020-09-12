@@ -186,7 +186,7 @@ public abstract class Experiment {
                 String f = resultsFilePath+name+"_"+i+".csv";
                 List<String[]> lines = CSVUtils.readLines(f, '|');
                 for(int j=1;j<lines.size();j++){
-                    CSVUtils.writeLine(writer, Arrays.asList(lines.get(i)), '|');
+                    CSVUtils.writeLine(writer, Arrays.asList(lines.get(j)), '|');
                 }
             }
             writer.flush();
