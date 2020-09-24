@@ -7,6 +7,8 @@ import rldevs4j.base.agent.preproc.Preprocessing;
 import rldevs4j.base.env.msg.Event;
 import rldevs4j.base.env.msg.Step;
 
+import java.io.IOException;
+
 /**
  * Agent abstract class (atomic DEVS) that must be implemented by each worker that interacts 
  * with an environment.
@@ -88,5 +90,5 @@ public abstract class Agent extends atomic {
     public abstract void trainingFinished();
     public abstract void clear();
     public abstract void saveModel(String path);
-    public abstract void loadModel(String path);
+    public abstract void loadModel(String path) throws IOException;
 }

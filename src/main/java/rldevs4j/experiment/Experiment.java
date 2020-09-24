@@ -82,7 +82,7 @@ public abstract class Experiment {
             if(logging)
                 logger.log(Level.INFO, "Experiment {0} Terminated. Elapsed time: {1} sec.", new Object[]{i, formatter.format(expRunningTime.div(TO_SECONDS).getDouble(0))});
             if(resultsFilePath != null)
-                writeResults(experimentsResults.get(experimentsResults.size()-1), i);
+                writeResults(experimentsResults.get(experimentsResults.size()-1), i, resultsFilePath+name+"_"+(i+1)+".csv");
         }        
         long endTotalTime = System.currentTimeMillis();
         expTotalRunningTime = (endTotalTime - startTotalTime);  //divide by 1000000 to get milliseconds.
@@ -93,6 +93,8 @@ public abstract class Experiment {
         if(plot)
             plotResults(experimentsResults);
     }
+
+    public abstract void test();
     
     public void finalLog(){
         logger.log(Level.INFO, "EXPERIMENT FINISHED. Total time: {0} sec.", formatter.format(getExpTotalRunningTimeSeconds()));
@@ -128,10 +130,9 @@ public abstract class Experiment {
         return f.exists() && !f.isDirectory();
     }
     
-    private void writeResults(ExperimentResult result, int repetition){
+    protected void writeResults(ExperimentResult result, int repetition, String filename){
         FileWriter writer;        
         try {
-            String filename = resultsFilePath+name+"_"+(repetition+1)+".csv";
             writer = new FileWriter(filename);
             //write headers 
             List<String> headers = new ArrayList<>();
