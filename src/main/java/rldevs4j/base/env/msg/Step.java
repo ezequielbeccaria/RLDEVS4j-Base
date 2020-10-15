@@ -1,7 +1,15 @@
 package rldevs4j.base.env.msg;
 
 import GenCol.entity;
+
+import java.io.Serializable;
 import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonGetter;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.fasterxml.jackson.databind.introspect.AnnotatedMember;
+import com.fasterxml.jackson.databind.introspect.JacksonAnnotationIntrospector;
 import org.nd4j.linalg.api.ndarray.INDArray;
 
 /**     
@@ -13,7 +21,9 @@ import org.nd4j.linalg.api.ndarray.INDArray;
  * being "true" indicates the episode has terminated. * 
  * @author Ezequiel Beccaría 
  */
-public class Step extends entity {    
+@JsonPropertyOrder({ "observation", "reward", "done" })
+@JsonIgnoreProperties({ "activeActions" })
+public class Step extends entity implements Serializable {
     private INDArray observation;
     private float reward;
     private final boolean done;
@@ -30,6 +40,12 @@ public class Step extends entity {
         return observation;
     }
 
+    @JsonGetter("observation")
+    public double[] getObservationDouble() {
+        return observation.toDoubleVector();
+    }
+
+    @JsonGetter("reward")
     public double getReward() {
         return reward;
     }
@@ -38,6 +54,7 @@ public class Step extends entity {
         reward += value;
     }
 
+    @JsonGetter("done")
     public boolean isDone() {
         return done;
     }
@@ -83,5 +100,12 @@ public class Step extends entity {
     
     public Step clone() {
         return new Step(observation.dup(), reward, done, activeActions);
+    }
+
+    public static class IgnoreInheritedIntrospector extends JacksonAnnotationIntrospector {
+
+        public boolean hasIgnoreMarker(final AnnotatedMember m) {
+            return m.getDeclaringClass() == entity.class || super.hasIgnoreMarker(m);
+        }
     }
 }
