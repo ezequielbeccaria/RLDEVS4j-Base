@@ -10,26 +10,7 @@
             <groupId>model</groupId>
             <artifactId>DEVS-Suite-facade</artifactId>
             <version>1.0</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>tw.edu.ntu.csie</groupId>
-                    <artifactId>libsvm</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
-        <!--CUDA-->
-        <!--        <dependency>-->
-        <!--            <groupId>org.nd4j</groupId>-->
-        <!--            <artifactId>nd4j-cuda-10.2-platform</artifactId>-->
-        <!--            <version>${deeplearning4j.version}</version>-->
-        <!--        </dependency>-->
-        <!--        <dependency>-->
-        <!--            <groupId>org.deeplearning4j</groupId>-->
-        <!--            <artifactId>deeplearning4j-cuda-10.2</artifactId>-->
-        <!--            <version>${deeplearning4j.version}</version>-->
-        <!--        </dependency>-->
-        <!--END CUDA-->
-
         <!--CPU-->
         <dependency>
             <groupId>org.nd4j</groupId>
