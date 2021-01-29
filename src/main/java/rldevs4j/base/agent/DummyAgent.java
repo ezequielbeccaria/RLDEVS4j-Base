@@ -1,6 +1,7 @@
 
 package rldevs4j.base.agent;
 
+import rldevs4j.base.agent.preproc.NoPreprocessing;
 import rldevs4j.base.agent.preproc.Preprocessing;
 import rldevs4j.base.env.msg.Event;
 import rldevs4j.base.env.msg.Step;
@@ -14,6 +15,12 @@ public class DummyAgent extends Agent{
     private double cumReward = 0D;
     private final Event defaultAction;
 
+    public DummyAgent(Event defaultAction) {
+        this("dummy", new NoPreprocessing(), defaultAction);
+    }
+    public DummyAgent(String name, Event defaultAction) {
+        this(name, new NoPreprocessing(), defaultAction);
+    }
 
     public DummyAgent(String name, Preprocessing preprocessing, Event defaultAction) {
         super(name, preprocessing, 1D);
