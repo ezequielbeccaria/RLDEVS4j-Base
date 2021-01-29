@@ -3,6 +3,7 @@ package rldevs4j.experiment;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
@@ -48,6 +49,15 @@ public abstract class Experiment {
         this.logging = logging;
         this.plot = plot;
         this.resultsFilePath = resultsFilePath;
+        File f = new File(resultsFilePath);
+        if (!Files.exists(f.toPath())) {
+            try {
+                Files.createDirectories(f.toPath());
+            } catch (IOException e) {
+                e.printStackTrace();
+                System.exit(-1);
+            }
+        }
         this.rnd = Nd4j.getRandom();
         if(seed != null && seed > 0)
             rnd.setSeed(seed);
