@@ -154,7 +154,7 @@ public abstract class Experiment {
             headers.add("avg_100_reward");
             headers.add("time");
             headers.add("avg_time");
-            CSVUtils.writeLine(writer, headers, '|');
+            CSVUtils.writeLine(writer, headers, ',');
             //write data
             for(int i=0;i<result.size();i++){
                 List<String> line = new ArrayList<>();

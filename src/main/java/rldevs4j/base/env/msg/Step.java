@@ -71,6 +71,17 @@ public class Step extends entity implements Serializable {
     public String toString() {
         return "Step{" + "observation=" + observation + ", reward=" + reward + ", done=" + done + '}';
     }
+
+    public String toCsv() {
+        StringBuilder sb = new StringBuilder();
+        for(int i=0;i<observation.length();i++)
+            sb.append(observation.getDouble(i)).append(",");
+
+        sb.append(reward).append(",");
+        sb.append(done);
+        sb.append("\n");
+        return sb.toString();
+    }
     
     /**
      * Returns the observation feature in idx position.
