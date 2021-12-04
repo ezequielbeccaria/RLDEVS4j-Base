@@ -10,6 +10,8 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.databind.introspect.AnnotatedMember;
 import com.fasterxml.jackson.databind.introspect.JacksonAnnotationIntrospector;
+import java.util.HashMap;
+import java.util.Map;
 import org.nd4j.linalg.api.ndarray.INDArray;
 
 /**     
@@ -21,19 +23,25 @@ import org.nd4j.linalg.api.ndarray.INDArray;
  * being "true" indicates the episode has terminated. * 
  * @author Ezequiel Beccaría 
  */
-@JsonPropertyOrder({ "observation", "reward", "done" })
+@JsonPropertyOrder({ "observation", "reward", "done", "info" })
 @JsonIgnoreProperties({ "activeActions" })
 public class Step extends entity implements Serializable {
     private INDArray observation;
     private float reward;
     private final boolean done;
     private final List<Event> activeActions;
+    private final Map<String,Object> info;
 
     public Step(INDArray observation, float reward, boolean done, List<Event> activeActions) {
+        this(observation, reward, done, activeActions, new HashMap<>());
+    }
+    
+    public Step(INDArray observation, float reward, boolean done, List<Event> activeActions, Map<String,Object> info) {
         this.observation = observation;
         this.reward = reward;
         this.done = done;
         this.activeActions = activeActions;
+        this.info = info;
     }
 
     public INDArray getObservation() {
@@ -65,6 +73,11 @@ public class Step extends entity implements Serializable {
 
     public void setObservation(INDArray observation) {
         this.observation = observation;
+    }
+
+    @JsonGetter("info")
+    public Map<String, Object> getInfo() {
+        return info;
     }
 
     @Override

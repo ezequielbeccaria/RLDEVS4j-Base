@@ -2,9 +2,8 @@ package rldevs4j.base.env;
 
 import java.util.List;
 import model.modeling.digraph;
-import org.nd4j.linalg.api.ndarray.INDArray;
-import rldevs4j.base.env.msg.Event;
 import rldevs4j.base.env.msg.Step;
+import rldevs4j.base.env.spaces.Space;
 
 /**
  * DEVS digraph class that must be implemented to define/model an RL environment.
@@ -21,6 +20,7 @@ public abstract class Environment extends digraph implements Cloneable{
     
     @Override
     public abstract Environment clone();
-    public abstract List<Event> getActionSpace();
+    public abstract Space getActionSpace();
+    public abstract Space getStateSpace();
     public abstract List<Step> getTrace();
 }
