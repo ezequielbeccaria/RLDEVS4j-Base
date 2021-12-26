@@ -1,5 +1,7 @@
 package rldevs4j.utils;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -60,5 +62,27 @@ public class DateUtils {
         }
         
         return calendar.getTime();
+    }
+    
+    /**
+     * Method that create an instance of date casting
+     * dateInString param (dd/MM/yyyy).
+     * @param stringDate
+     * @return 
+     */
+    public static Date initDate(String dateInString) throws ParseException {
+        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+        return formatter.parse(dateInString);        
+    }
+    
+    /**
+     * Check if two dates are the same day.
+     * @param date1
+     * @param date2
+     * @return 
+     */
+    public static boolean isSameDay(Date date1, Date date2) {
+        SimpleDateFormat fmt = new SimpleDateFormat("dd/MM/yyyy");
+        return fmt.format(date1).equals(fmt.format(date2));
     }
 }
