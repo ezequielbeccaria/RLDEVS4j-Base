@@ -17,4 +17,9 @@ public class Categorical<T> extends Event{
     public T getValue() {
         return value;
     }
+
+    @Override
+    public Event copy() {
+        return new Categorical(this.getId(), this.getName(), this.getType(), this.value);
+    }
 }

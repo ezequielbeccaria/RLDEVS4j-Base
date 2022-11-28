@@ -10,7 +10,7 @@ import GenCol.entity;
  * 
  *  @author Ezequiel Beccaría
  */
-public class Event extends entity {
+public abstract class Event extends entity {
     private final EventType type;
     private final int id;
 
@@ -25,10 +25,8 @@ public class Event extends entity {
         System.out.print(name+"("+id+")");
     }
 
-    public Event copy() {
-        return new Event(this.id, this.name, this.type);
-    }
-
+    public abstract Event copy();
+    
     @Override
     public String getName() {
         return name;

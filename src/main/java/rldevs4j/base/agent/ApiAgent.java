@@ -16,6 +16,7 @@ import java.net.ProtocolException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
+import rldevs4j.base.env.msg.DiscreteEvent;
 
 public class ApiAgent extends Agent {
     private double cumReward;
@@ -50,7 +51,7 @@ public class ApiAgent extends Agent {
             String response = sentRequest("POST", object2Json(step));
             TypeReference<HashMap<String,Integer>> typeRef = new TypeReference<HashMap<String,Integer>>() {};
             Map<String, Integer> resp = jsonMapper.readValue(response, typeRef);
-            Event action = new Event(resp.get("action"),"action", EventType.action);
+            Event action = new DiscreteEvent(0,"action", EventType.action, resp.get("action"));
             return action;
         } catch (IOException e) {
             e.printStackTrace();

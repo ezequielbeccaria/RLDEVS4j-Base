@@ -21,4 +21,9 @@ public class MultCategorical<T> extends Event {
     public T[] getValues() {
         return values;
     }
+
+    @Override
+    public Event copy() {
+        return new MultCategorical(this.getId(), this.getName(), this.getType(), this.values);
+    }
 }

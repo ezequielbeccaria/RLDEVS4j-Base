@@ -1,19 +1,15 @@
 package rldevs4j.base.env.gsmdp;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import model.modeling.atomic;
 import model.modeling.content;
 import model.modeling.message;
 import model.simulation.CoordinatorInterface;
 import model.simulation.CoupledCoordinatorInterface;
-import org.nd4j.linalg.api.ndarray.INDArray;
 import rldevs4j.base.env.gsmdp.evgen.ExogenousEventActivation;
 import rldevs4j.base.env.msg.Event;
-import rldevs4j.base.env.msg.EventType;
 import rldevs4j.base.env.msg.Step;
 
 /*     
