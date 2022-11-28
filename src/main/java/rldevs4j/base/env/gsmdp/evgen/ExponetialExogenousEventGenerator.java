@@ -40,6 +40,6 @@ public class ExponetialExogenousEventGenerator extends ExogenousEventGenerator {
     
     @Override
     public void initialize() {
-        super.initialize();        
+        holdIn(this.getInitPhase(), nextSigma());       
     }
 }
