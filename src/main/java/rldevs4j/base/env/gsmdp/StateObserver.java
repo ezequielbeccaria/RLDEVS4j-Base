@@ -77,7 +77,7 @@ public class StateObserver extends atomic implements Cloneable{
                         behavior.activeEvents());
                 m.add(con_event_gen);
             }
-            Step step = new Step(behavior.observation().dup(), reward, behavior.done(), behavior.enabledActions());
+            Step step = new Step(new ArrayList<Double>(behavior.observation()), reward, behavior.done(), behavior.enabledActions());
             if(debug)
                 System.out.println(step);
             trace.add(step);

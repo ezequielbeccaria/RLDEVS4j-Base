@@ -10,9 +10,9 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.databind.introspect.AnnotatedMember;
 import com.fasterxml.jackson.databind.introspect.JacksonAnnotationIntrospector;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import org.nd4j.linalg.api.ndarray.INDArray;
 
 /**     
  * Environment's return to the agent based on OpenAI's Gym Step.
@@ -26,17 +26,17 @@ import org.nd4j.linalg.api.ndarray.INDArray;
 @JsonPropertyOrder({ "observation", "reward", "done", "info" })
 @JsonIgnoreProperties({ "activeActions" })
 public class Step extends entity implements Serializable {
-    private INDArray observation;
+    private List<Double> observation;
     private float reward;
     private final boolean done;
     private final List<Event> activeActions;
     private final Map<String,Object> info;
 
-    public Step(INDArray observation, float reward, boolean done, List<Event> activeActions) {
+    public Step(List<Double> observation, float reward, boolean done, List<Event> activeActions) {
         this(observation, reward, done, activeActions, new HashMap<>());
     }
     
-    public Step(INDArray observation, float reward, boolean done, List<Event> activeActions, Map<String,Object> info) {
+    public Step(List<Double> observation, float reward, boolean done, List<Event> activeActions, Map<String,Object> info) {
         this.observation = observation;
         this.reward = reward;
         this.done = done;
@@ -44,13 +44,13 @@ public class Step extends entity implements Serializable {
         this.info = info;
     }
 
-    public INDArray getObservation() {
+    public List getObservation() {
         return observation;
     }
 
     @JsonGetter("observation")
     public double[] getObservationDouble() {
-        return observation.toDoubleVector();
+        return observation.stream().mapToDouble(Double::doubleValue).toArray();
     }
 
     @JsonGetter("reward")
@@ -71,7 +71,7 @@ public class Step extends entity implements Serializable {
         return activeActions;
     }
 
-    public void setObservation(INDArray observation) {
+    public void setObservation(List observation) {
         this.observation = observation;
     }
 
@@ -87,9 +87,8 @@ public class Step extends entity implements Serializable {
 
     public String toCsv() {
         StringBuilder sb = new StringBuilder();
-        for(int i=0;i<observation.length();i++)
-            sb.append(observation.getDouble(i)).append(",");
-
+        for(int i=0;i<observation.size();i++)
+            sb.append(observation.get(i)).append(",");
         sb.append(reward).append(",");
         sb.append(done);
         sb.append("\n");
@@ -103,27 +102,27 @@ public class Step extends entity implements Serializable {
      * @return 
      */
     public double getFeature(int idx){
-        assert Math.abs(idx) < observation.length();
+        assert Math.abs(idx) < observation.size();
         if(idx>=0)
-            return observation.getDouble(idx);
+            return observation.get(idx);
         else
-            return observation.getDouble(observation.length()+idx);
+            return observation.get(observation.size()+idx);
     }
     
     public void setFeature(int idx, double value){
-        assert Math.abs(idx) < observation.length();
+        assert Math.abs(idx) < observation.size();
         if(idx>=0)
-            observation.putScalar(new long[]{idx}, value);
+            observation.set(idx, value);
         else
-            observation.putScalar(new long[]{observation.length()+idx}, value);
+            observation.set(observation.size()+idx, value);
     }
     
     public int observationSize(){
-        return observation.columns();
+        return observation.size();
     }
     
     public Step clone() {
-        return new Step(observation.dup(), reward, done, activeActions);
+        return new Step(new ArrayList<Double>(observation), reward, done, activeActions);
     }
 
     public static class IgnoreInheritedIntrospector extends JacksonAnnotationIntrospector {
