@@ -9,7 +9,7 @@ import rldevs4j.base.env.msg.Event;
  * @author Ezequiel Beccaría
  */
 // TODO Use the same random number generator in all the test
-public class ExponetialExogenousEventGenerator extends ExogenousEventGenerator {
+public class ExponentialExogenousEventGenerator extends ExogenousEventGenerator {
     private final double eventRate; //event exponetial occurence rate
     private final RandomDataGenerator rnd;        
 
@@ -21,7 +21,7 @@ public class ExponetialExogenousEventGenerator extends ExogenousEventGenerator {
      * @param initSigma
      * @param e 
      */
-    public ExponetialExogenousEventGenerator(String name, Event e, String initPhase, Double initSigma, double eventRate) {
+    public ExponentialExogenousEventGenerator(String name, Event e, String initPhase, Double initSigma, double eventRate) {
         super(name, e, initPhase, initSigma);
         this.rnd = new RandomDataGenerator();
         this.eventRate = eventRate;  
@@ -35,7 +35,7 @@ public class ExponetialExogenousEventGenerator extends ExogenousEventGenerator {
     
     @Override
     public ExogenousEventGenerator clone(){
-        return new ExponetialExogenousEventGenerator(name, getE(), getInitPhase(), getInitSigma(), eventRate);        
+        return new ExponentialExogenousEventGenerator(name, getE(), getInitPhase(), getInitSigma(), eventRate);        
     }
     
     @Override
