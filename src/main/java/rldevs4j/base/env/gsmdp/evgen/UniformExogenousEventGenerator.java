@@ -36,7 +36,7 @@ public class UniformExogenousEventGenerator extends ExogenousEventGenerator {
             boolean cumulativeUpperBound) throws Exception {        
         super(name, e, initPhase, initSigma);
         
-        if (lowerBound > upperBound)
+        if (lowerBound >= upperBound)
             throw new Exception("`lowerBound` must be <= `upperBound`");
         
         this.rnd = new RandomDataGenerator();
