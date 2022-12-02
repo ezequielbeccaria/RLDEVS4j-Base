@@ -53,18 +53,17 @@ public class StateObserver extends atomic implements Cloneable{
     @Override
     public void deltext(double e, message x) {
         //Iterate over messages and update state
-        Double next_sigma = null;
+        Event event = null;
         for (int i = 0; i < x.getLength(); i++) {
             if (messageOnPort(x, "event", i)) {
                 double currentTime = currentGlobalTime();
-                Event event = (Event) x.getValOnPort("event", i);
+                event = (Event) x.getValOnPort("event", i);
                 behavior.trasition(event, currentTime);
-                next_sigma = event.getDelay();
             }
         }            
         reward += behavior.reward(); // reward acumulation for multiple events
-        if (next_sigma != null)
-            setSigma(next_sigma);
+        if (event != null)
+            setSigma(event.getDelay());
         else
             setSigma(sigma - e);
     }

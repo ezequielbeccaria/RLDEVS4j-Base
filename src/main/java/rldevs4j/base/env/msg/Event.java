@@ -14,19 +14,22 @@ public class Event extends entity {
     private final EventType type;
     private final int id;
     private final double delay;
+    private final EventDelayType delayType;
 
     public Event(int id, String name, EventType type) {
         super(name);        
         this.id = id;
         this.type = type;
         this.delay = 0D;
+        this.delayType = EventDelayType.fixed;
     }
     
-    public Event(int id, String name, EventType type, double delay) {
+    public Event(int id, String name, EventType type, double delay, EventDelayType delayType) {
         super(name);        
         this.id = id;
         this.type = type;
         this.delay = delay;
+        this.delayType = delayType;
     }
 
     @Override
@@ -35,7 +38,7 @@ public class Event extends entity {
     }
 
     public Event copy(){
-        return new Event(id, name, type, delay);
+        return new Event(id, name, type, delay, delayType);
     }
     
     @Override
@@ -52,7 +55,7 @@ public class Event extends entity {
     }    
 
     public double getDelay() {
-        return delay;
+        return this.delayType.getDelay(delay);
     }
 
     @Override
