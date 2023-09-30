@@ -13,6 +13,8 @@ import com.fasterxml.jackson.databind.introspect.JacksonAnnotationIntrospector;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import org.nd4j.linalg.api.ndarray.INDArray;
+import org.nd4j.linalg.factory.Nd4j;
 
 /**     
  * Environment's return to the agent based on OpenAI's Gym Step.
@@ -52,6 +54,11 @@ public class Step extends entity implements Serializable {
     public double[] getObservationDouble() {
         return observation.stream().mapToDouble(Double::doubleValue).toArray();
     }
+    
+    public INDArray getObservationINDArray() {
+        return Nd4j.create(observation);
+    }
+
 
     @JsonGetter("reward")
     public double getReward() {
