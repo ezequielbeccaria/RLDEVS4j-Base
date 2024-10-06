@@ -22,5 +22,9 @@ public class DiscreteEvent extends Event{
     public Event copy() {
         return new DiscreteEvent(getId(), getName(), getType(), value);
     }
+
+    public int getValue() {
+        return value;
+    }
     
 }

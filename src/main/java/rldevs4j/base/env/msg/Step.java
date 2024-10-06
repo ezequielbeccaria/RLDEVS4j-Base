@@ -10,11 +10,8 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.databind.introspect.AnnotatedMember;
 import com.fasterxml.jackson.databind.introspect.JacksonAnnotationIntrospector;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import org.nd4j.linalg.api.ndarray.INDArray;
-import org.nd4j.linalg.factory.Nd4j;
 
 /**     
  * Environment's return to the agent based on OpenAI's Gym Step.
@@ -28,17 +25,17 @@ import org.nd4j.linalg.factory.Nd4j;
 @JsonPropertyOrder({ "observation", "reward", "done", "info" })
 @JsonIgnoreProperties({ "activeActions" })
 public class Step extends entity implements Serializable {
-    private List<Double> observation;
+    private Map<String, List<Double>> observation;
     private float reward;
     private final boolean done;
     private final List<Event> activeActions;
     private final Map<String,Object> info;
 
-    public Step(List<Double> observation, float reward, boolean done, List<Event> activeActions) {
+    public Step(Map<String, List<Double>> observation, float reward, boolean done, List<Event> activeActions) {
         this(observation, reward, done, activeActions, new HashMap<>());
     }
     
-    public Step(List<Double> observation, float reward, boolean done, List<Event> activeActions, Map<String,Object> info) {
+    public Step(Map<String, List<Double>> observation, float reward, boolean done, List<Event> activeActions, Map<String,Object> info) {
         this.observation = observation;
         this.reward = reward;
         this.done = done;
@@ -46,19 +43,10 @@ public class Step extends entity implements Serializable {
         this.info = info;
     }
 
-    public List getObservation() {
+    @JsonGetter("observation")
+    public Map<String, List<Double>>getObservation() {
         return observation;
     }
-
-    @JsonGetter("observation")
-    public double[] getObservationDouble() {
-        return observation.stream().mapToDouble(Double::doubleValue).toArray();
-    }
-    
-    public INDArray getObservationINDArray() {
-        return Nd4j.create(observation);
-    }
-
 
     @JsonGetter("reward")
     public double getReward() {
@@ -74,11 +62,7 @@ public class Step extends entity implements Serializable {
         return done;
     }
 
-    public List<Event> getActiveActions() {
-        return activeActions;
-    }
-
-    public void setObservation(List observation) {
+    public void setObservation(Map<String, List<Double>> observation) {
         this.observation = observation;
     }
 
@@ -102,38 +86,18 @@ public class Step extends entity implements Serializable {
         return sb.toString();
     }
     
-    /**
-     * Returns the observation feature in idx position.
-     * If idx is negative, return the feature in inverse order.
-     * @param idx
-     * @return 
-     */
-    public double getFeature(int idx){
-        assert Math.abs(idx) < observation.size();
-        if(idx>=0)
-            return observation.get(idx);
-        else
-            return observation.get(observation.size()+idx);
-    }
-    
-    public void setFeature(int idx, double value){
-        assert Math.abs(idx) < observation.size();
-        if(idx>=0)
-            observation.set(idx, value);
-        else
-            observation.set(observation.size()+idx, value);
-    }
-    
     public int observationSize(){
         return observation.size();
     }
     
+    @Override
     public Step clone() {
-        return new Step(new ArrayList<Double>(observation), reward, done, activeActions);
+        return new Step(observation, reward, done, activeActions);
     }
 
     public static class IgnoreInheritedIntrospector extends JacksonAnnotationIntrospector {
 
+        @Override
         public boolean hasIgnoreMarker(final AnnotatedMember m) {
             return m.getDeclaringClass() == entity.class || super.hasIgnoreMarker(m);
         }
