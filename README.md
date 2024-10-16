@@ -97,5 +97,8 @@ Library for the implementation of reinforcement learning environments using a DE
             <maven.compiler.target>1.8</maven.compiler.target>
             <deeplearning4j.version>1.0.0-beta6</deeplearning4j.version>
         </properties>
+
+DEVS-Suite-Facade dependency can be found in this [repository](https://github.com/ezequielbeccaria/Devs-Suite-Facade).
+
 # Usage
 ![Class_diagram](/uml/class_diagram.png)
