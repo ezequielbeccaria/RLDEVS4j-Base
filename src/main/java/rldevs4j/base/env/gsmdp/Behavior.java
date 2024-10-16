@@ -17,6 +17,6 @@ public interface Behavior {
     public boolean done();
     public List<Event> enabledActions();
     public ExogenousEventActivation activeEvents();
-    public List<Event> getAllActios();
-    public boolean notifyAgent();
+    public List<Event> getAllActions();
+    public double getSigma();
 }

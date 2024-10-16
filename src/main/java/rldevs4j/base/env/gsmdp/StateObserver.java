@@ -42,12 +42,21 @@ public class StateObserver extends atomic implements Cloneable{
     public void initialize() {  
         trace.clear();
         behavior.initialize();
-        passivate();
+        holdIn("passive", 0);
     }
 
     @Override
     public void deltint() {
-        setSigma(INFINITY);
+        behavior.trasition(null, currentGlobalTime());        
+        trace.add(
+            new Step(
+                behavior.observation(),
+                reward,
+                behavior.done(),
+                behavior.enabledActions()
+            )
+        );
+        holdIn("passive", behavior.getSigma());
     }
 
     @Override
@@ -56,41 +65,33 @@ public class StateObserver extends atomic implements Cloneable{
         Event event = null;
         for (int i = 0; i < x.getLength(); i++) {
             if (messageOnPort(x, "event", i)) {
-                double currentTime = currentGlobalTime();
-                event = (Event) x.getValOnPort("event", i);
-                behavior.trasition(event, currentTime);
+                behavior.trasition(
+                        (Event) x.getValOnPort("event", i),
+                        currentGlobalTime()
+                );
             }
         }            
         reward += behavior.reward(); // reward acumulation for multiple events
-        if (event != null)
-            setSigma(event.getDelay());
-        else
-            setSigma(sigma - e);
+        setSigma(behavior.getSigma() - e);
     }
 
     @Override
     public message out() {
         message m = new message();
-        if(this.sigma != INFINITY){
-            //activate/deactiva exogenous events
-            ExogenousEventActivation eea = behavior.activeEvents();
-            if(eea != null){
-                content con_event_gen = makeContent(
-                        "event_genearator",
-                        behavior.activeEvents());
-                m.add(con_event_gen);
-            }
-            Step step = new Step(behavior.observation(), reward, behavior.done(), behavior.enabledActions());
-            if(debug)
-                System.out.println(step);
-            trace.add(step);
-            //sent new state, actios and reward to agent
-            if(behavior.notifyAgent()){
-                content con_agent = makeContent("step", step.clone());
-                m.add(con_agent);
-                reward = 0F;
-            }
+
+        //activate/deactiva exogenous events
+        ExogenousEventActivation eea = behavior.activeEvents();
+        if(eea != null){
+            content con_event_gen = makeContent(
+                    "event_genearator",
+                    behavior.activeEvents());
+            m.add(con_event_gen);
         }
+        //sent new state, actios and reward to agent
+        content con_agent = makeContent("step", trace.get(trace.size()-1).clone());
+        m.add(con_agent);
+        reward = 0F;
+            
         return m;
     }
 
