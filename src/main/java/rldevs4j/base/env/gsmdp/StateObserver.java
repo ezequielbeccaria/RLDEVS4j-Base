@@ -56,6 +56,7 @@ public class StateObserver extends atomic implements Cloneable{
                 behavior.enabledActions()
             )
         );
+        reward = 0F;
         holdIn("passive", behavior.getSigma());
     }
 
@@ -90,8 +91,6 @@ public class StateObserver extends atomic implements Cloneable{
         //sent new state, actios and reward to agent
         content con_agent = makeContent("step", trace.get(trace.size()-1).clone());
         m.add(con_agent);
-        reward = 0F;
-            
         return m;
     }
 
