@@ -17,6 +17,7 @@ public interface Behavior {
     public boolean done();
     public List<Event> enabledActions();
     public ExogenousEventActivation activeEvents();
+    public Map<String,Object> info();
     public List<Event> getAllActions();
     public double getSigma();
 }

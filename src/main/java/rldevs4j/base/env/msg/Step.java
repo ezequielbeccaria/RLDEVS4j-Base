@@ -73,7 +73,7 @@ public class Step extends entity implements Serializable {
 
     @Override
     public String toString() {
-        return "Step{" + "observation=" + observation + ", reward=" + reward + ", done=" + done + '}';
+        return "Step{" + "observation=" + observation + ", reward=" + reward + ", done=" + done + ", info=" + info + "}";
     }
 
     public String toCsv() {
@@ -82,6 +82,7 @@ public class Step extends entity implements Serializable {
             sb.append(observation.get(i)).append(",");
         sb.append(reward).append(",");
         sb.append(done);
+        sb.append(info);
         sb.append("\n");
         return sb.toString();
     }
@@ -92,7 +93,7 @@ public class Step extends entity implements Serializable {
     
     @Override
     public Step clone() {
-        return new Step(observation, reward, done, activeActions);
+        return new Step(observation, reward, done, activeActions, info);
     }
 
     public static class IgnoreInheritedIntrospector extends JacksonAnnotationIntrospector {

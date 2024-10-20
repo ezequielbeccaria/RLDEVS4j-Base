@@ -53,7 +53,8 @@ public class StateObserver extends atomic implements Cloneable{
                 behavior.observation(),
                 reward,
                 behavior.done(),
-                behavior.enabledActions()
+                behavior.enabledActions(),
+                behavior.info()
             )
         );
         reward = 0F;
