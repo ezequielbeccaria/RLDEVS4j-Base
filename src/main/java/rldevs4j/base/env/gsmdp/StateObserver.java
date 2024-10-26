@@ -23,6 +23,7 @@ public class StateObserver extends atomic implements Cloneable{
     protected Behavior behavior;
     protected boolean debug;
     protected List<Step> trace;
+    protected Double lastGlobalTime;
 
     public StateObserver(
             Behavior behavior,
@@ -48,15 +49,6 @@ public class StateObserver extends atomic implements Cloneable{
     @Override
     public void deltint() {
         behavior.trasition(null, currentGlobalTime());        
-        trace.add(
-            new Step(
-                behavior.observation(),
-                reward,
-                behavior.done(),
-                behavior.enabledActions(),
-                behavior.info()
-            )
-        );
         reward = 0F;
         holdIn("passive", behavior.getSigma());
     }
@@ -74,11 +66,20 @@ public class StateObserver extends atomic implements Cloneable{
             }
         }            
         reward += behavior.reward(); // reward acumulation for multiple events
-        setSigma(behavior.getSigma() - e);
+        holdIn("passive", sigma - e);   
     }
 
     @Override
     public message out() {
+        Step step = new Step(
+                behavior.observation(),
+                reward,
+                behavior.done(),
+                behavior.enabledActions(),
+                behavior.info()
+            );
+        trace.add(step);
+        
         message m = new message();
 
         //activate/deactiva exogenous events
@@ -90,7 +91,7 @@ public class StateObserver extends atomic implements Cloneable{
             m.add(con_event_gen);
         }
         //sent new state, actios and reward to agent
-        content con_agent = makeContent("step", trace.get(trace.size()-1).clone());
+        content con_agent = makeContent("step", step.clone());
         m.add(con_agent);
         return m;
     }
@@ -112,5 +113,11 @@ public class StateObserver extends atomic implements Cloneable{
             parent = parent.getParent();
         }        
         return globalCoordnator.getTL();
-    }  
+    } 
+    
+    @Override
+    public void deltcon(double e,message x){ //usual devs
+        deltext(e,x);
+        deltint();      
+    }
 }    
